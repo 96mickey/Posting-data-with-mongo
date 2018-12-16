@@ -42,38 +42,70 @@ class ProfilePage extends Component {
   }
   
   like = (id) => {
+    //for bteer user expirence
+    let posts = this.state.posts;
+    let index = posts.findIndex(item => item._id === id);
+    posts[index].likeCount += 1;
+    posts[index].likes.push("one like.")
+    this.setState({posts})
+    
+    
     PostData(`like/${id}`)
       .then(result => {
         if (result.status === "failure") {
-          Notification.error(result.message);
-        } else {
           let posts = this.state.posts;
           let index = posts.findIndex(item => item._id === id);
-          posts[index].likeCount += 1;
-          posts[index].likes.push("one like.")
+          posts[index].likeCount -= 1;
+          posts[index].likes.pop()
           this.setState({posts})
+          Notification.error(result.message);
+        } else {
+          console.log("good to go!")
+          // let posts = this.state.posts;
+          // let index = posts.findIndex(item => item._id === id);
+          // posts[index].likeCount += 1;
+          // posts[index].likes.push("one like.")
+          // this.setState({posts})
         }
       })
       .catch(error => {
+        let posts = this.state.posts;
+          let index = posts.findIndex(item => item._id === id);
+          posts[index].likeCount -= 1;
+          posts[index].likes.pop()
+          this.setState({posts})
         //shift the post
         Notification.error("Error! Please try again.");
       });
   }
   
   unLike = (id) => {
+    
+    let posts = this.state.posts;
+    let index = posts.findIndex(item => item._id === id);
+    posts[index].likeCount -= 1;
+    posts[index].likes.pop()
+    this.setState({posts})
+    
     DeleteData(`like/${id}`)
       .then(result => {
         if (result.status === "failure") {
-          Notification.error(result.message);
-        } else {
           let posts = this.state.posts;
           let index = posts.findIndex(item => item._id === id);
-          posts[index].likeCount -= 1;
-          posts[index].likes.pop()
+          posts[index].likeCount += 1;
+          posts[index].likes.push("one like")
           this.setState({posts})
+          Notification.error(result.message);
+        } else {
+          console.log("good to go again!")
         }
       })
       .catch(error => {
+        let posts = this.state.posts;
+          let index = posts.findIndex(item => item._id === id);
+          posts[index].likeCount += 1;
+          posts[index].likes.push("one like")
+          this.setState({posts})
         Notification.error("Error! Please try again.");
       });
   }

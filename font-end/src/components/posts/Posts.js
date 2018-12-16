@@ -5,9 +5,11 @@ const Posts = props => {
     let posts = props.posts
     let listPosts = posts.map(post => {
         let date = new Date(post.created);
-        let dateString = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+        let month = Number(date.getMonth()) + 1
+        let dateString = date.getDate() + "/" + month  + "/" + date.getFullYear();
+        let timeString = date.getHours() + ":" + date.getMinutes()
         return (<div key={post._id} className="single-post-wrapper">
-        <div className="user-name-on-post"><strong>{post.userName}</strong><div>{dateString}</div></div>
+        <div className="user-name-on-post"><strong>{post.userName}</strong><div>{dateString} at {timeString}</div></div>
         <div>{post.body}</div>
         <div className="like-handler">
         <div className="like-item">{post.likeCount} <i>likes</i></div>
